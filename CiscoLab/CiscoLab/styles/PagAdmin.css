@@ -1,0 +1,75 @@
+﻿* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f5f5dc;
+}
+
+.cuerpo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.contenido {
+    min-width: 600px;
+    min-height: 400px;
+    background-color: rgb(0, 0, 0, 0.50);
+    width: 60%;
+    height: 500px;
+    padding: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+    border-radius: 20px;
+
+    color: #ededed;
+    font-weight: bold;
+    font-size: 22px;
+    text-align: center;
+}
+
+.opciones {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    padding: 10px;
+}
+
+.tabla {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+tbody > tr > th{
+    color: black;
+    text-align: center;
+    font-size: 18px;
+    padding: 10px;
+}
+
+tbody > tr > td {
+    color: black;
+    font-weight: normal;
+    text-align: center;
+    font-size: 18px;
+    padding: 5px;
+}
+
+tbody > tr {
+    border-bottom: 1px solid black;
+    background-color: #ededed;
+}
+
+tbody :last-child {
+    border-bottom: none;
+}
+
+.otroMes {
+    color: darkgray; /* Color de texto gris para los días de otros meses */
+}
