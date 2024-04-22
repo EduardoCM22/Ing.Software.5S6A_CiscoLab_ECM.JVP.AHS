@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administrador.cs" />
+    <Compile Include="Conexion.cs" />
+    <Compile Include="DiaInhabil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reservacion.cs" />
     <Compile Include="Usuario.cs" />

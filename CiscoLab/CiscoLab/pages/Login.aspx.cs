@@ -19,24 +19,23 @@ namespace CiscoLab
         protected void btnIngresar_Click(object sender, EventArgs e)
         {
             Usuario user = new UsuarioDL().LoginUsuario(txtUsuario.Text, txtContraseña.Text);
-            if (user != null) 
+            if (user != null)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Inicio de sesión exitoso.');", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Inicio de sesión exitoso.'); window.location.href = 'PagUsuario.aspx';", true);
                 Session["Usuario"] = user;
-                Response.Redirect("PagUsuario.aspx");
             }
-            else 
+            else
             {
                 Administrador admin = new AdministradorDL().LoginAdministrador(txtUsuario.Text, txtContraseña.Text);
                 if (admin != null)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Inicio de sesión exitoso.');", true);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Inicio de sesión exitoso.'); window.location.href = 'PagAdmin.aspx';", true);
                     Session["Administrador"] = admin;
-                    Response.Redirect("PagAdmin.aspx");
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error: Nombre de usuario o contraseña incorrectos.');", true);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Error: Nombre de usuario o contraseña incorrectos.');", true);
+                    txtContraseña.Focus();
                 }
             }
         }

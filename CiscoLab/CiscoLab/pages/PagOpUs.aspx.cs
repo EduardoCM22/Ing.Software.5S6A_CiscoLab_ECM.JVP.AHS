@@ -31,6 +31,7 @@ namespace CiscoLab.pages
                     if (ID != 0)
                     {
                         lblTitulo.Text = "Editar Usuario";
+                        tlt.Text = "Editar Usuario";
                         btnSubmit.Text = "Actualizar";
 
                         Usuario empleado = new UsuarioDL().ObtenerUsuario(ID);
@@ -46,12 +47,13 @@ namespace CiscoLab.pages
                     else
                     {
                         lblTitulo.Text = "Nuevo Usuario";
+                        tlt.Text = "Nuevo Usuario";
                         btnSubmit.Text = "Guardar";
                         //CargarDepartamentos();
                     }
                 }
                 else
-                    Response.Redirect("~/Default.aspx");
+                    Response.Redirect("~/pages/PagAdmin.aspx");
             }
         }
 
@@ -117,15 +119,29 @@ namespace CiscoLab.pages
 
             if (respuesta == 1) 
             {
-                Response.Redirect("~/pages/PagAdmin.aspx");
+                if (ID != 0)
+                {
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Éxito: La operación se ha realizado correctamente.'); setTimeout(function(){ window.location.href = 'PagAdmin.aspx'; }, 0);", true);
+                    //Response.Redirect("~/pages/PagAdmin.aspx");
+                }
+                else
+                {
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "alert('Éxito: La operación se ha realizado correctamente.')", true);
+                    txtNoControl.Text = string.Empty;
+                    txtNombre.Text = string.Empty;
+                    txtApellidos.Text = string.Empty;
+                    txtEmail.Text = string.Empty;
+                    txtPassword.Text = string.Empty;
+                    txtConfirmPassword.Text = string.Empty;
+                }
             }
             else if (respuesta == 2) 
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "alert('Error: Numero de Control duplicado')", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "alert('Error: Numero de Control duplicado.')", true);
             }
             else
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "alert('No se pudo realizar la operacion')", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "alert('No se pudo realizar la operacion.')", true);
             }
         }
     }

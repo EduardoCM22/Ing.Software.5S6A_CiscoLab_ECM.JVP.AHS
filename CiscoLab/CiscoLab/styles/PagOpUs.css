@@ -1,28 +1,45 @@
-﻿/* Estilos para el cuerpo del formulario */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
+﻿* {
     padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos para el cuerpo del formulario */
+body {
+    background: radial-gradient(circle at -4% -12.9%, rgb(74, 98, 110) 0.3%, rgb(30, 33, 48) 90.2%);
 }
 
 /* Estilos para el contenedor principal */
 .container {
     max-width: 600px;
-    margin: 50px auto;
-    background-color: #fff;
-    padding: 20px;
+    width: 60% !important;
+    margin: 30px 50px ;
+    background-color: rgb(0,0,0,0.25);
+    color: white;
+    padding: 20px 50px !important;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Estilos para los campos de entrada */
 .form-control {
+    border-color: white !important;
+    background-color: #f5f5f5 !important;
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
+    /*margin-bottom: 20px;*/
+    border: 1px solid #000000 !important;
     border-radius: 5px;
+}
+
+.titulo {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.seccion {
+    margin-bottom: 10px;
+    height: 85px;
 }
 
 /* Estilos para las etiquetas */
@@ -30,38 +47,18 @@ label {
     font-weight: bold;
 }
 
-/* Estilos para los botones */
-.btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: #fff;
-}
-
 /* Estilos para los mensajes de error */
 .text-danger {
-    color: #dc3545;
-    font-size: 12px;
-    margin-top: 5px;
+    color: #e30e22;
+    margin-top: 2px;
+    font: bolder;
 }
 
 /* Estilos para el pie de página */
 .footer {
+    gap: 10px;
+    justify-content: end;
+    display: flex;
     text-align: right;
-    margin-top: 20px;
+    margin-top: 10px;
 }
-
-    /* Estilos para el contenedor del botón de cancelar */
-    .footer .btn-secondary {
-        margin-right: 10px;
-    }

@@ -13,7 +13,7 @@ namespace CiscoLab.DataLayer
     public class AdministradorDL
     {
 
-        string strConexion = "Data Source=EDWARDCM;Initial Catalog=CiscoLab;User ID=sa;Password=root";
+        string strConexion = Conexion.strConexion;
 
         public Administrador LoginAdministrador(string user, string passw)
         {
@@ -26,12 +26,12 @@ namespace CiscoLab.DataLayer
                     connection.Open();
 
                     // Hashear la contraseña proporcionada
-                    byte[] hashedPasswBytes = HashPassword(passw);
+                    //byte[] hashedPasswBytes = HashPassword(passw);
 
                     string query = "select * from Administradores where (Username=@user and Password=@passwHash);";
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@user", user);
-                    command.Parameters.AddWithValue("@passwHash", hashedPasswBytes);
+                    command.Parameters.AddWithValue("@passwHash", passw);
 
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.Read())
@@ -53,12 +53,14 @@ namespace CiscoLab.DataLayer
             }
         }
 
-        private byte[] HashPassword(string password)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                return sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-            }
-        }
+        //private byte[] HashPassword(string password)
+        //{
+        //    using (SHA256 sha256 = SHA256.Create())
+        //    {
+        //        return sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+        //    }
+        //}
+
+
     }
 }

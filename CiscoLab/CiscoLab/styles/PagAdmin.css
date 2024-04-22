@@ -5,8 +5,24 @@
 }
 
 body {
-    background-color: #f5f5dc;
+    /*#606c75*/
+    /*background-color: #f4f4f4;*/
+    /*background: linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%);*/
+    /*background: radial-gradient(circle at -4% -12.9%, rgb(74, 98, 110) 0.3%, rgb(30, 33, 48) 90.2%);*/
+    background: radial-gradient(circle at 10% 20%, rgb(69, 86, 102) 0%, rgb(34, 34, 34) 90%);
 }
+
+
+#lblCiscoLab, #lblNombre {
+    font-size:x-large;
+    font-weight:lighter;
+}
+#lnkbtnUsuarios, #lnkbtnReservaciones {
+    font-size: large;
+}
+
+
+
 
 .cuerpo {
     display: flex;
@@ -17,33 +33,103 @@ body {
 .contenido {
     min-width: 600px;
     min-height: 400px;
-    background-color: rgb(0, 0, 0, 0.50);
-    width: 60%;
-    height: 500px;
-    padding: 10px;
+    background-color: rgb(0, 0, 0, 0.25);
+    width: 70%;
+    height: 600px;
+    padding: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
     margin-left: 50px;
     margin-right: 50px;
     border-radius: 20px;
-
     color: #ededed;
-    font-weight: bold;
-    font-size: 22px;
+    font-weight: lighter;
+    font-size: 25px;
     text-align: center;
 }
 
 .opciones {
     display: flex;
     flex-direction: row;
-    justify-content: start;
-    padding: 10px;
+    justify-content: end;
+    padding: 0 5% 10px 5%;
 }
 
 .tabla {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    border-radius: 20px
+}
+
+.divisor {
+    height: 1px; 
+    background-color: white; 
+    width: 100%;
+}
+
+
+
+#TablaUsuarios {
+    height: 480px; 
+}
+
+
+
+.reservaciones {
+    display: flex; 
+    flex-direction: row;
+    margin: 10px; 
+    justify-content: center;
+}
+
+.reservacionesSup {
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+}
+
+#ActPanelReservaciones {
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    /*height: 340px;*/
+    width: 100%;
+}
+
+#TablaCuposReservaciones {
+    /*max-height: 340px;*/ 
+    overflow-y: auto; 
+    height: 334px; 
+    width: 30%;
+}
+
+.datos {
+    flex-direction: column;
+    display: flex;
+    gap: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    width: 30%;
+}
+
+#TablaReservaciones {
+    /*max-height: 232px;*/ 
+    overflow-y: auto; 
+    height: 238px; 
+    width: 98%;
+    /*margin-bottom: 10px;*/
+}
+
+
+
+
+
+.table {
+    margin-bottom: 0;
 }
 
 tbody > tr > th{
@@ -62,14 +148,61 @@ tbody > tr > td {
 }
 
 tbody > tr {
-    border-bottom: 1px solid black;
+    /*border-bottom: 1px solid #f9f9f9;*/
     background-color: #ededed;
 }
 
-tbody :last-child {
+/*tbody :last-child {
     border-bottom: none;
-}
+}*/
+
+
 
 .otroMes {
-    color: darkgray; /* Color de texto gris para los días de otros meses */
+    color: darkgray !important; /* Color de texto gris para los días de otros meses */
 }
+.esteMes > a{
+    color: #fff !important;
+}
+table.calendar-dark td[colspan="7"] {
+    background-color: #495057 !important;
+}
+
+/* Estilos para los enlaces dentro de la segunda tabla */
+table.calendar-dark table a {
+    color: white !important;
+}
+
+.calendar-dark {
+    width: 30%;
+}
+
+
+
+
+
+
+
+
+.tabla::-webkit-scrollbar {
+    width: 10px; /* Ancho de la barra de desplazamiento */
+}
+
+.tabla::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1); /* Color de fondo de la barra de desplazamiento */
+}
+
+.tabla::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5); /* Color del "pulgar" de la barra de desplazamiento */
+    border-radius: 10px; /* Redondear el "pulgar" */
+}
+
+
+
+
+
+
+/*.calendar-dark > tbody > tr > td > a{
+    color:  !important;
+}*/
+

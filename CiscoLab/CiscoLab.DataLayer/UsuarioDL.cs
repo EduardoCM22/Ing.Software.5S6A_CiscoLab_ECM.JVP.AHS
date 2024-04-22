@@ -11,7 +11,7 @@ namespace CiscoLab.DataLayer
 {
     public class UsuarioDL
     {
-        string strConexion = "Data Source=EDWARDCM;Initial Catalog=CiscoLab;User ID=sa;Password=root";
+        string strConexion = Conexion.strConexion;
 
         public Usuario LoginUsuario(string user, string passw)
         {
@@ -51,13 +51,13 @@ namespace CiscoLab.DataLayer
             }
         }
 
-        private byte[] HashPassword(string password)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                return sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-            }
-        }
+        //private byte[] HashPassword(string password)
+        //{
+        //    using (SHA256 sha256 = SHA256.Create())
+        //    {
+        //        return sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+        //    }
+        //}
 
         public List<Usuario> ObtenerUsuarios()
         {
@@ -69,7 +69,7 @@ namespace CiscoLab.DataLayer
                 {
                     connection.Open();
 
-                    string query = "select * from Usuarios;";
+                    string query = "select * from Usuarios order by Username, Nombre, Apellidos;";
                     SqlCommand command = new SqlCommand(query, connection);
 
                     SqlDataReader reader = command.ExecuteReader();
@@ -93,7 +93,7 @@ namespace CiscoLab.DataLayer
             }
         }
 
-        public Usuario ObtenerUsuario(int ID) 
+        public Usuario ObtenerUsuario(int ID)
         {
 
             Usuario user = null;
@@ -107,6 +107,41 @@ namespace CiscoLab.DataLayer
                     string query = "select * from Usuarios where ID = @ID;";
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@ID", ID);
+
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        user = new Usuario();
+                        user.ID = Convert.ToInt32(reader["ID"]);
+                        user.Password = reader["Password"].ToString(); // Asegúrate de que esto sea un byte[]
+                        user.Username = reader["Username"].ToString();
+                        user.Nombre = reader["Nombre"].ToString();
+                        user.Apellidos = reader["Apellidos"].ToString();
+                        user.Email = reader["Email"].ToString();
+                    }
+                    return user;
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
+            }
+        }
+
+        public Usuario ObtenerUsuario(string username)
+        {
+
+            Usuario user = null;
+
+            using (SqlConnection connection = new SqlConnection(strConexion))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "select * from Usuarios where Username = @username;";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@username", username);
 
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
@@ -163,12 +198,12 @@ namespace CiscoLab.DataLayer
 
                     // Verificar si se ha insertado alguna fila
                     return rowsAffected;
-                    
+
                 }
                 catch (Exception ex)
                 {
                     return 0;
-                    
+
                 }
             }
         }

@@ -2,7 +2,11 @@
 using CiscoLab.EntityLayer;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlTypes;
+using System.Globalization;
 using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Web;
 using System.Web.UI;
@@ -13,43 +17,25 @@ namespace CiscoLab.pages
 {
     public partial class PagAdmin : System.Web.UI.Page
     {
+        private int recarga;
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            Administrador administrador = new Administrador();
-            administrador.Nombre = "Eduardo";
-            administrador.Apellidos = "Campos Manriquez";
-            ////Administrador administrador = (Administrador)Session["Administrador"];
+            //Administrador administrador = new Administrador();
+            //administrador.Nombre = "Eduardo";
+            //administrador.Apellidos = "Campos Manriquez";
+            Administrador administrador = (Administrador)Session["Administrador"];
             lblNombre.Text = "  " + administrador.Nombre + " " + administrador.Apellidos;
             CargarUsuarios();
-            TablaReservaciones();
-            cldrDiaInhabil.DayRender += new DayRenderEventHandler(cldrDiaInhabil_DayRender);
+            CargarReservaciones();
+            //cldrDiaInhabil.DayRender += new DayRenderEventHandler(cldrDiaInhabil_DayRender);
+            //cldrReservaciones.DayRender += new DayRenderEventHandler(cldrReservaciones_DayRender);
+
         }
 
-        protected void cldrDiaInhabil_DayRender(object sender, DayRenderEventArgs e)
+        protected void btnCerrarSesion_Click(object sender, EventArgs e)
         {
-            if (e.Day.IsOtherMonth)
-            {
-                e.Day.IsSelectable = false;
-                e.Cell.CssClass = "otroMes";
-            }
-            else
-            {
-                // Verificar si el día es sábado o domingo
-                if (e.Day.IsWeekend)
-                {
-                    // Puedes cambiar el estilo del día aquí si lo deseas
-                    e.Cell.ForeColor = System.Drawing.Color.Red; // Cambiar el color del texto a rojo por ejemplo
-                }
-            }
-
-            //// Verificar si el día es sábado o domingo
-            //if (e.Day.Date.DayOfWeek == DayOfWeek.Saturday || e.Day.Date.DayOfWeek == DayOfWeek.Sunday)
-            //{
-            //    // Deshabilitar el día
-            //    e.Day.IsSelectable = false;
-            //    // Puedes cambiar el estilo del día aquí si lo deseas
-            //    e.Cell.ForeColor = System.Drawing.Color.Red; // Cambiar el color del texto a rojo por ejemplo
-            //}
+            Response.Redirect("~/pages/Login.aspx");
         }
 
         private void CargarUsuarios()
@@ -61,27 +47,41 @@ namespace CiscoLab.pages
 
         }
 
-        protected string GenerateRandomString(int length)
+        private void CargarReservaciones()
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_+=";
-            Random random = new Random();
-            StringBuilder stringBuilder = new StringBuilder(length);
+            List<Reservacion> reservaciones = new ReservacionDL().ObtenerReservaciones();
 
-            for (int i = 0; i < length; i++)
-            {
-                stringBuilder.Append(chars[random.Next(chars.Length)]);
-            }
-
-            return stringBuilder.ToString();
+            gvReservaciones.DataSource = reservaciones;
+            gvReservaciones.DataBind();
         }
 
-        // Evento Click para el botón "Editar"
+        protected void cldrReservaciones_DayRender(object sender, DayRenderEventArgs e)
+        {
+            if (e.Day.IsOtherMonth)
+            {
+                e.Day.IsSelectable = false;
+                e.Cell.CssClass = "otroMes";
+            }
+            else
+            {
+                if (e.Day.IsWeekend)
+                {
+                    e.Cell.ForeColor = System.Drawing.Color.Red;
+                    e.Day.IsSelectable = false;
+                }
+                else
+                {
+                    e.Cell.CssClass = "esteMes";
+                }
+            }
+        }
+
         protected void AgregarUsuario_Click(object sender, EventArgs e)
         {
             Response.Redirect("PagOpUs.aspx?ID=0");
         }
 
-        // Evento Click para el botón "Eliminar"
+        // Evento Click para el botón "Editar"
         protected void EditarUsuario_Click(object sender, EventArgs e)
         {
             LinkButton btn = (LinkButton)sender;
@@ -89,6 +89,7 @@ namespace CiscoLab.pages
             Response.Redirect($"PagOpUs.aspx?ID={ID}");
         }
 
+        // Evento Click para el botón "Eliminar"
         protected void EliminarUsuario_Click(object sender, EventArgs e)
         {
             LinkButton btn = (LinkButton)sender;
@@ -101,117 +102,162 @@ namespace CiscoLab.pages
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error: No se pudo eliminar el usuario.');", true);
-
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Error: No se pudo eliminar el usuario.');", true);
             }
         }
 
-        private void TablaReservaciones()
+        protected void GenerarReservacion_Click(object sender, EventArgs e)
         {
-            List<Reservacion> reservaciones = new ReservacionDL().ObtenerReservaciones();
+            //LinkButton btn = (LinkButton)sender;
+            //string Hora = btn.CommandArgument;
+            //Response.Redirect($"PagOpRs.aspx?Hora={Hora}");
 
-            // Crear la fila de encabezado
-            TableHeaderRow tableHeaderRow = new TableHeaderRow();
-            TableHeaderCell cell1 = new TableHeaderCell();
-            TableHeaderCell cell2 = new TableHeaderCell();
-            TableHeaderCell cell3 = new TableHeaderCell();
-            TableHeaderCell cell4 = new TableHeaderCell();
-            TableHeaderCell cell5 = new TableHeaderCell();
-            TableHeaderCell cell6 = new TableHeaderCell();
-
-            // Configurar los encabezados de columna
-            cell1.Text = "No.reservacion";
-            cell2.Text = "Hora";
-            cell3.Text = "Fecha";
-            cell4.Text = "Nombre Completo";
-            cell5.Text = "No.Control";
-            cell6.Text = "";
-
-            // Agregar los encabezados a la fila de encabezado
-            tableHeaderRow.Cells.Add(cell1);
-            tableHeaderRow.Cells.Add(cell2);
-            tableHeaderRow.Cells.Add(cell3);
-            tableHeaderRow.Cells.Add(cell4);
-            tableHeaderRow.Cells.Add(cell5);
-            tableHeaderRow.Cells.Add(cell6);
-
-            // Agregar la fila de encabezado a la tabla
-            tblReservaciones.Rows.Add(tableHeaderRow);
-
-            // Iterar sobre los usuarios y agregarlos a la tabla
-
-            if (reservaciones != null) 
+            if (txtNoControl.Text == string.Empty)
             {
-                foreach (Reservacion item in reservaciones)
+                lblValidacionTxtNoControl.Text = "El número de control es obligatorio";
+                lblValidacionTxtNoControl.Visible = true;
+                return;
+            }
+            else if (txtNoControl.Text.Length != 9)
+            {
+                lblValidacionTxtNoControl.Text = "El número de control debe tener 9 caracteres";
+                lblValidacionTxtNoControl.Visible = true;
+                return;
+            }
+
+            lblValidacionTxtNoControl.Visible = false;
+
+
+            LinkButton btn = (LinkButton)sender;
+            GridViewRow row = (GridViewRow)btn.NamingContainer;
+            string hora = row.Cells[0].Text;
+            string fecha = cldrReservaciones.SelectedDate.ToString("yyyy-MM-dd");
+
+            int rowsAffected = new ReservacionDL().GenerarReservacion(hora, fecha, txtNoControl.Text);
+            if (rowsAffected == 1)
+            {
+                txtNoControl.Text = string.Empty;
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Éxito: Se generó la reservación correctamente.');", true);
+                CargarTablaHorasCupos();
+                CargarReservaciones();
+            }
+            else if (rowsAffected == 2)
+            {
+                lblValidacionTxtNoControl.Text = "El usuario ingresado es incorrecto";
+                lblValidacionTxtNoControl.Visible = true;
+                return;
+            }
+            else
+            {
+                lblValidacionTxtNoControl.Text = "Ocurrió un error al realizar la operación, inténtelo más tarde";
+                lblValidacionTxtNoControl.Visible = true;
+                return;
+            }
+
+        }
+
+        protected void EliminarReservacioon_Click(object sender, EventArgs e)
+        {
+            LinkButton btn = (LinkButton)sender;
+            string ID = btn.CommandArgument;
+
+            int respuesta = new ReservacionDL().EliminarReservacion(Convert.ToInt32(ID));
+            if (respuesta != 0)
+            {
+                CargarReservaciones();
+
+                string x = cldrReservaciones.SelectedDate.ToString("dd-MM-yyyy");
+                if (x != "01-01-0001")
                 {
-                    // Crear una nueva fila de datos
-                    TableRow tableRow = new TableRow();
-
-                    // Crear celdas para cada atributo del usuario
-                    TableCell cellI1 = new TableCell();
-                    TableCell cellI2 = new TableCell();
-                    TableCell cellI3 = new TableCell();
-                    TableCell cellI4 = new TableCell();
-                    TableCell cellI5 = new TableCell();
-                    TableCell cellI6 = new TableCell();
-
-                    // Configurar los datos en las celdas
-                    cellI1.Text = Convert.ToInt32(item.ID).ToString();
-                    cellI2.Text = item.Hora;
-                    cellI3.Text = item.Fecha;
-                    cellI4.Text = item.NombreCompleto;
-                    cellI5.Text = item.Username;
-
-                    // Crear botones "Editar" y "Eliminar"
-                    //Button btnEditar = new Button();
-                    //btnEditar.CssClass = "btn btn-sm btn-primary";
-                    //btnEditar.Text = "Editar";
-                    //btnEditar.CommandArgument = item.Username;
-                    //btnEditar.Click += new EventHandler(btnEditar_Click);
-                    //cellI4.Controls.Add(btnEditar);
-
-                    Button btnEliminar = new Button();
-                    btnEliminar.CssClass = "btn btn-sm btn-danger";
-                    btnEliminar.Text = "Eliminar";
-                    btnEliminar.CommandArgument = item.Username;
-                    //btnEliminar.Click += new EventHandler(btnEliminar_Click);
-                    cellI6.Controls.Add(btnEliminar);
-
-                    // Agregar las celdas a la fila de datos
-                    tableRow.Cells.Add(cellI1);
-                    tableRow.Cells.Add(cellI2);
-                    tableRow.Cells.Add(cellI3);
-                    tableRow.Cells.Add(cellI4);
-                    tableRow.Cells.Add(cellI5);
-                    tableRow.Cells.Add(cellI6);
-
-                    // Agregar la fila de datos a la tabla
-                    tblReservaciones.Rows.Add(tableRow);
+                    CargarTablaHorasCupos();
                 }
             }
-            
+            else
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error: No se pudo eliminar la reservación.');", true);
+
+            }
         }
 
-        protected void modal_Click(object sender, EventArgs e)
+        protected void CargarTablaHorasCupos()
         {
-            string script = "$('#staticBackdrop').modal('show');";
-            ClientScript.RegisterStartupScript(this.GetType(), "Popup", script, true);
+            DataTable dtHorasCupos = new DataTable();
+            dtHorasCupos.Columns.Add("Hora", typeof(string));
+            dtHorasCupos.Columns.Add("InfoCupo", typeof(string)); // Una sola columna para combinar Color y Habilitada
+
+            string fecha = cldrReservaciones.SelectedDate.ToString("yyyy-MM-dd");
+
+            // Agrega las horas y cupos disponibles a la tabla
+            for (int i = 7; i <= 15; i++)
+            {
+                string hora = i.ToString("00") + ":00";
+                string infoCupo;
+                string CssClass;
+                bool habilitada;
+
+                List<Reservacion> reservaciones = new ReservacionDL().BuscarReservaciones(fecha, hora);
+
+                if (reservaciones.Count == 0)
+                {
+                    CssClass = "btn btn-sm btn-success";
+                    habilitada = true;
+                }
+                else if (reservaciones.Count == 1)
+                {
+                    CssClass = "btn btn-sm btn-warning";
+                    habilitada = true;
+                }
+                else
+                {
+                    CssClass = "btn btn-sm btn-danger disabled";
+                    habilitada = false;
+                }
+
+                // Combina Color y Habilitada en una sola cadena y agrega al DataTable
+                infoCupo = CssClass + "|" + habilitada.ToString();
+                dtHorasCupos.Rows.Add(hora, infoCupo);
+            }
+
+            gvHorasCupos.DataSource = dtHorasCupos;
+            gvHorasCupos.DataBind();
+
+            lblNoControl.Visible = true;
+            txtNoControl.Visible = true;
+            txtNoControl.Enabled = true;
         }
 
-        protected void Button2_Click(object sender, EventArgs e)
+        protected bool GetHabilitada(object infoCupo)
         {
-            string script = "$('#staticBackdrop').modal('show');";
-            ClientScript.RegisterStartupScript(this.GetType(), "Popup", script, true);
+            if (infoCupo != null)
+            {
+                string[] parts = infoCupo.ToString().Split('|');
+                if (parts.Length == 2)
+                {
+                    return Convert.ToBoolean(parts[1]);
+                }
+            }
+            return false; // Valor predeterminado si hay un problema
         }
 
-        protected void InhabilitarDia_Click(object sender, EventArgs e)
+        protected string GetColor(object infoCupo)
         {
-            Console.WriteLine(cldrDiaInhabil.SelectedDate.ToString());
+            if (infoCupo != null)
+            {
+                string[] parts = infoCupo.ToString().Split('|');
+                if (parts.Length == 2)
+                {
+                    return parts[0];
+                }
+            }
+            return ""; // Valor predeterminado si hay un problema
         }
 
-        protected void btnCerrarSesion_Click(object sender, EventArgs e)
+        protected void cldrReservaciones_SelectionChanged(object sender, EventArgs e)
         {
-            Response.Redirect("~/pages/Login.aspx");
+            cldrReservaciones.SelectedDayStyle.BackColor = System.Drawing.Color.SlateGray;
+            CargarTablaHorasCupos();
         }
+
+        ///////////////////////////
     }
 }
