@@ -33,13 +33,22 @@ namespace CiscoLab.pages
         protected global::System.Web.UI.WebControls.LinkButton lnkbtnDisponibilidad;
 
         /// <summary>
-        /// lnkbtnReservaciones control.
+        /// lnkbtnMisReservaciones control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkbtnReservaciones;
+        protected global::System.Web.UI.WebControls.LinkButton lnkbtnMisReservaciones;
+
+        /// <summary>
+        /// lblNombre control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblNombre;
 
         /// <summary>
         /// btnCerrarSesion control.
@@ -51,21 +60,75 @@ namespace CiscoLab.pages
         protected global::System.Web.UI.WebControls.Button btnCerrarSesion;
 
         /// <summary>
-        /// cldrDiaInhabil control.
+        /// ScrptManager control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Calendar cldrDiaInhabil;
+        protected global::System.Web.UI.ScriptManager ScrptManager;
 
         /// <summary>
-        /// tblReservaciones control.
+        /// lblDisponibilidad control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table tblReservaciones;
+        protected global::System.Web.UI.WebControls.Label lblDisponibilidad;
+
+        /// <summary>
+        /// ActPanelDisponibilidad control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel ActPanelDisponibilidad;
+
+        /// <summary>
+        /// cldrReservaciones control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Calendar cldrReservaciones;
+
+        /// <summary>
+        /// gvHorasCupos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvHorasCupos;
+
+        /// <summary>
+        /// lblMisReservaciones control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMisReservaciones;
+
+        /// <summary>
+        /// ActPanelReservaciones control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel ActPanelReservaciones;
+
+        /// <summary>
+        /// gvReservaciones control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvReservaciones;
     }
 }

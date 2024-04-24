@@ -29,10 +29,12 @@
                         <li class="nav-item">
                             <asp:LinkButton ID="lnkbtnReservaciones" runat="server" CssClass="nav-link" href="#Reservaciones">Reservaciones</asp:LinkButton>
                         </li>
-
+                        <li class="nav-item">
+                            <asp:LinkButton ID="lnkbtnHistReserv" runat="server" CssClass="nav-link" href="#HistorialReservaciones">Historial De Reservaciones</asp:LinkButton>
+                        </li>
                     </ul>
                     <div class="d-flex" role="search" style="align-items: center;">
-                        <span class="material-symbols-outlined" style="font-size: 40px; font-weight:lighter; color: white">shield_person</span>
+                        <span class="material-symbols-outlined" style="font-size: 40px; font-weight: lighter; color: white">shield_person</span>
                         <asp:Label class="navbar-brand" ID="lblNombre" runat="server" Text=""></asp:Label>
                         <asp:Button ID="btnCerrarSesion" runat="server" Text="Cerrar sesión" CssClass="btn btn-sm btn-outline-light" OnClick="btnCerrarSesion_Click" />
                     </div>
@@ -67,7 +69,7 @@
                                     </asp:TemplateField>
                                     <asp:BoundField DataField="Email" HeaderText="Correo" />
                                     <asp:BoundField DataField="Password" HeaderText="Contraseña" />
-                                    <asp:TemplateField>
+                                    <asp:TemplateField ItemStyle-CssClass="column-btns">
                                         <ItemTemplate>
                                             <asp:LinkButton runat="server" CommandArgument='<%# Eval("ID") %>'
                                                 OnClick="EditarUsuario_Click" CssClass="btn btn-sm btn-primary">Editar</asp:LinkButton>
@@ -103,12 +105,15 @@
                                     <asp:GridView ID="gvHorasCupos" runat="server" CssClass="table table-dark table-bordered" AutoGenerateColumns="false">
                                         <Columns>
                                             <asp:BoundField DataField="Hora" HeaderText="Hora" />
-                                            <asp:TemplateField HeaderText="Cupo">
+                                            <asp:TemplateField HeaderText="Reservar">
                                                 <ItemTemplate>
                                                     <asp:LinkButton runat="server" ID="lnkCupo" OnClick="GenerarReservacion_Click"
-                                                        Enabled='<%# GetHabilitada(Eval("InfoCupo")) %>' Text="Reservar"
+                                                        Width="80px"
+                                                        Text='<%# GetTexto(Eval("InfoCupo")) %>'
+                                                        Enabled='<%# GetHabilitada(Eval("InfoCupo")) %>'
                                                         CssClass='<%# GetColor(Eval("InfoCupo")) %>'
-                                                        CommandArgument='<%# Eval("Hora") %>'></asp:LinkButton>
+                                                        CommandArgument='<%# Eval("Hora") %>'>
+                                                    </asp:LinkButton>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                         </Columns>
@@ -136,7 +141,7 @@
                                         <asp:TemplateField>
                                             <ItemTemplate>
                                                 <asp:LinkButton runat="server" CommandArgument='<%# Eval("ID") %>'
-                                                    OnClick="EliminarReservacioon_Click" CssClass="btn btn-sm btn-danger" OnClientClick="return confirm('¿Deseas eliminar la reservación?')">Eliminar</asp:LinkButton>
+                                                    OnClick="EliminarReservacion_Click" CssClass="btn btn-sm btn-danger" OnClientClick="return confirm('¿Deseas cancelar la reservación?')">Cancelar</asp:LinkButton>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                     </Columns>
@@ -146,6 +151,33 @@
                         </ContentTemplate>
                     </asp:UpdatePanel>
                 </div>
+                <%--  --%>
+            </div>
+
+
+            <div class="contenido" id="HistorialReservaciones">
+                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                    <ContentTemplate>
+
+
+                        <asp:Label ID="lblHistReserv" runat="server" Text="Historial De Reservaciones"></asp:Label>
+
+                        <%--<div class="opciones">
+                            <asp:Button runat="server" Text="Agregar Usuario" CssClass="btn btn-sm btn-success" OnClick="AgregarUsuario_Click" />
+                        </div>--%>
+
+                        <div class="tabla" id="TablaHistReserv">
+                            <asp:GridView ID="gvHistReserv" runat="server" CssClass="table table-dark table-bordered" AutoGenerateColumns="false">
+                                <Columns>
+                                    <asp:BoundField DataField="Fecha" HeaderText="Fecha" />
+                                    <asp:BoundField DataField="Hora" HeaderText="Hora" />
+                                    <asp:BoundField DataField="NombreCompleto" HeaderText="Nombre Completo" />
+                                    <asp:BoundField DataField="Username" HeaderText="No. Control" />
+                                </Columns>
+                            </asp:GridView>
+                        </div>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
                 <%--  --%>
             </div>
 

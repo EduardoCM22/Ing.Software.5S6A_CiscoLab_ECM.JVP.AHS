@@ -17,7 +17,7 @@ body {
     font-size:x-large;
     font-weight:lighter;
 }
-#lnkbtnUsuarios, #lnkbtnReservaciones {
+#lnkbtnUsuarios, #lnkbtnReservaciones, #lnkbtnHistReserv {
     font-size: large;
 }
 
@@ -31,7 +31,7 @@ body {
 }
 
 .contenido {
-    min-width: 600px;
+    min-width: 830px;
     min-height: 400px;
     background-color: rgb(0, 0, 0, 0.25);
     width: 70%;
@@ -74,6 +74,10 @@ body {
     height: 480px; 
 }
 
+.column-btns {
+    min-width: 145px;
+}
+
 
 
 .reservaciones {
@@ -104,6 +108,7 @@ body {
     /*max-height: 340px;*/ 
     overflow-y: auto; 
     height: 334px; 
+    min-width: 236px;
     width: 30%;
 }
 
@@ -113,6 +118,7 @@ body {
     gap: 10px;
     font-weight: normal;
     font-size: 16px;
+    min-width: 160px;
     width: 30%;
 }
 
@@ -121,6 +127,15 @@ body {
     overflow-y: auto; 
     height: 238px; 
     width: 98%;
+    /*margin-bottom: 10px;*/
+}
+
+#TablaHistReserv{
+    margin: 10px;
+    /*max-height: 232px;*/
+    overflow-y: auto;
+    height: 484px;
+    /*width: 98%;*/
     /*margin-bottom: 10px;*/
 }
 

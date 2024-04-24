@@ -17,7 +17,6 @@ namespace CiscoLab.pages
 {
     public partial class PagAdmin : System.Web.UI.Page
     {
-        private int recarga;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -25,38 +24,32 @@ namespace CiscoLab.pages
             //administrador.Nombre = "Eduardo";
             //administrador.Apellidos = "Campos Manriquez";
             Administrador administrador = (Administrador)Session["Administrador"];
-            lblNombre.Text = "  " + administrador.Nombre + " " + administrador.Apellidos;
+            try 
+            {
+                lblNombre.Text = "  " + administrador.Nombre + " " + administrador.Apellidos;
+            }
+            catch(Exception ex) 
+            {
+                Response.Redirect("~/pages/Login.aspx");
+            }
             CargarUsuarios();
             CargarReservaciones();
+            CargarHistorialReservaciones();
             //cldrDiaInhabil.DayRender += new DayRenderEventHandler(cldrDiaInhabil_DayRender);
             //cldrReservaciones.DayRender += new DayRenderEventHandler(cldrReservaciones_DayRender);
 
         }
 
-        protected void btnCerrarSesion_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("~/pages/Login.aspx");
-        }
-
-        private void CargarUsuarios()
-        {
-            List<Usuario> usuarios = new UsuarioDL().ObtenerUsuarios();
-
-            gvUsuarios.DataSource = usuarios;
-            gvUsuarios.DataBind();
-
-        }
-
-        private void CargarReservaciones()
-        {
-            List<Reservacion> reservaciones = new ReservacionDL().ObtenerReservaciones();
-
-            gvReservaciones.DataSource = reservaciones;
-            gvReservaciones.DataBind();
-        }
-
         protected void cldrReservaciones_DayRender(object sender, DayRenderEventArgs e)
         {
+            DateTime a = e.Day.Date;
+            DateTime fecha = DateTime.Today;
+
+            if (a < fecha)
+            {
+                e.Day.IsSelectable = false;
+            }
+
             if (e.Day.IsOtherMonth)
             {
                 e.Day.IsSelectable = false;
@@ -75,13 +68,118 @@ namespace CiscoLab.pages
                 }
             }
         }
+        protected void cldrReservaciones_SelectionChanged(object sender, EventArgs e)
+        {
+            cldrReservaciones.SelectedDayStyle.BackColor = System.Drawing.Color.SlateGray;
+            CargarTablaHorasCupos();
+        }
+
+
+        private void CargarUsuarios()
+        {
+            List<Usuario> usuarios = new UsuarioDL().ObtenerUsuarios();
+
+            gvUsuarios.DataSource = usuarios;
+            gvUsuarios.DataBind();
+
+        }
+
+        private void CargarReservaciones()
+        {
+            string fecha = DateTime.Today.ToString("yyyy-MM-dd");
+            List<Reservacion> reservaciones = new ReservacionDL().ObtenerReservaciones(fecha, true);
+
+            gvReservaciones.DataSource = reservaciones;
+            gvReservaciones.DataBind();
+        }
+
+        private void CargarHistorialReservaciones()
+        {
+
+            // Convertir la fecha anterior a formato de cadena (yyyy-MM-dd)
+            string fecha = DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd");
+
+            List<Reservacion> reservaciones = new ReservacionDL().ObtenerReservaciones(fecha, false);
+
+            gvHistReserv.DataSource = reservaciones;
+            gvHistReserv.DataBind();
+        }
+
+        protected void CargarTablaHorasCupos()
+        {
+            DataTable dtHorasCupos = new DataTable();
+            dtHorasCupos.Columns.Add("Hora", typeof(string));
+            dtHorasCupos.Columns.Add("InfoCupo", typeof(string)); // Una sola columna para combinar Color y Habilitada
+
+            string fecha = cldrReservaciones.SelectedDate.ToString("yyyy-MM-dd");
+
+            // Agrega las horas y cupos disponibles a la tabla
+            for (int i = 7; i <= 15; i++)
+            {
+                string hora = i.ToString("00") + ":00";
+                string infoCupo;
+                string CssClass;
+                bool habilitada;
+                string texto;
+
+                List<Reservacion> reservaciones = new ReservacionDL().BuscarReservaciones(fecha, hora);
+
+                if (reservaciones.Count == 0)
+                {
+                    CssClass = "btn btn-sm btn-success";
+                    habilitada = true;
+                    texto = "2 Cupos";
+                }
+                else if (reservaciones.Count == 1)
+                {
+                    CssClass = "btn btn-sm btn-warning";
+                    habilitada = true;
+                    texto = "1 Cupo";
+                }
+                else
+                {
+                    CssClass = "btn btn-sm btn-danger disabled";
+                    habilitada = false;
+                    texto = "Ocupado";
+                }
+
+                // Combina Color y Habilitada en una sola cadena y agrega al DataTable
+                infoCupo = CssClass + "|" + habilitada.ToString() + "|" + texto.ToString();
+                dtHorasCupos.Rows.Add(hora, infoCupo);
+            }
+
+            gvHorasCupos.DataSource = dtHorasCupos;
+            gvHorasCupos.DataBind();
+
+            lblNoControl.Visible = true;
+            txtNoControl.Visible = true;
+            txtNoControl.Enabled = true;
+        }
+
+
+
+        protected void btnCerrarSesion_Click(object sender, EventArgs e)
+        {
+            // Limpiar la sesión actual
+            Session.Clear();
+            Session.Abandon();
+
+            // Prevenir el almacenamiento en caché de la página actual y las páginas anteriores
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-1));
+            Response.Cache.SetNoStore();
+
+            Response.Redirect("~/pages/Login.aspx");
+            Dispose();
+        }
+
+
 
         protected void AgregarUsuario_Click(object sender, EventArgs e)
         {
             Response.Redirect("PagOpUs.aspx?ID=0");
         }
 
-        // Evento Click para el botón "Editar"
         protected void EditarUsuario_Click(object sender, EventArgs e)
         {
             LinkButton btn = (LinkButton)sender;
@@ -89,7 +187,6 @@ namespace CiscoLab.pages
             Response.Redirect($"PagOpUs.aspx?ID={ID}");
         }
 
-        // Evento Click para el botón "Eliminar"
         protected void EliminarUsuario_Click(object sender, EventArgs e)
         {
             LinkButton btn = (LinkButton)sender;
@@ -105,6 +202,8 @@ namespace CiscoLab.pages
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Error: No se pudo eliminar el usuario.');", true);
             }
         }
+
+
 
         protected void GenerarReservacion_Click(object sender, EventArgs e)
         {
@@ -156,7 +255,7 @@ namespace CiscoLab.pages
 
         }
 
-        protected void EliminarReservacioon_Click(object sender, EventArgs e)
+        protected void EliminarReservacion_Click(object sender, EventArgs e)
         {
             LinkButton btn = (LinkButton)sender;
             string ID = btn.CommandArgument;
@@ -179,59 +278,14 @@ namespace CiscoLab.pages
             }
         }
 
-        protected void CargarTablaHorasCupos()
-        {
-            DataTable dtHorasCupos = new DataTable();
-            dtHorasCupos.Columns.Add("Hora", typeof(string));
-            dtHorasCupos.Columns.Add("InfoCupo", typeof(string)); // Una sola columna para combinar Color y Habilitada
 
-            string fecha = cldrReservaciones.SelectedDate.ToString("yyyy-MM-dd");
-
-            // Agrega las horas y cupos disponibles a la tabla
-            for (int i = 7; i <= 15; i++)
-            {
-                string hora = i.ToString("00") + ":00";
-                string infoCupo;
-                string CssClass;
-                bool habilitada;
-
-                List<Reservacion> reservaciones = new ReservacionDL().BuscarReservaciones(fecha, hora);
-
-                if (reservaciones.Count == 0)
-                {
-                    CssClass = "btn btn-sm btn-success";
-                    habilitada = true;
-                }
-                else if (reservaciones.Count == 1)
-                {
-                    CssClass = "btn btn-sm btn-warning";
-                    habilitada = true;
-                }
-                else
-                {
-                    CssClass = "btn btn-sm btn-danger disabled";
-                    habilitada = false;
-                }
-
-                // Combina Color y Habilitada en una sola cadena y agrega al DataTable
-                infoCupo = CssClass + "|" + habilitada.ToString();
-                dtHorasCupos.Rows.Add(hora, infoCupo);
-            }
-
-            gvHorasCupos.DataSource = dtHorasCupos;
-            gvHorasCupos.DataBind();
-
-            lblNoControl.Visible = true;
-            txtNoControl.Visible = true;
-            txtNoControl.Enabled = true;
-        }
 
         protected bool GetHabilitada(object infoCupo)
         {
             if (infoCupo != null)
             {
                 string[] parts = infoCupo.ToString().Split('|');
-                if (parts.Length == 2)
+                if (parts.Length == 3)
                 {
                     return Convert.ToBoolean(parts[1]);
                 }
@@ -244,7 +298,7 @@ namespace CiscoLab.pages
             if (infoCupo != null)
             {
                 string[] parts = infoCupo.ToString().Split('|');
-                if (parts.Length == 2)
+                if (parts.Length == 3)
                 {
                     return parts[0];
                 }
@@ -252,10 +306,17 @@ namespace CiscoLab.pages
             return ""; // Valor predeterminado si hay un problema
         }
 
-        protected void cldrReservaciones_SelectionChanged(object sender, EventArgs e)
+        protected string GetTexto(object infoCupo)
         {
-            cldrReservaciones.SelectedDayStyle.BackColor = System.Drawing.Color.SlateGray;
-            CargarTablaHorasCupos();
+            if (infoCupo != null)
+            {
+                string[] parts = infoCupo.ToString().Split('|');
+                if (parts.Length == 3)
+                {
+                    return parts[2];
+                }
+            }
+            return ""; // Valor predeterminado si hay un problema
         }
 
         ///////////////////////////

@@ -12,7 +12,7 @@ namespace CiscoLab.DataLayer
     {
         string strConexion = Conexion.strConexion;
 
-        public List<Reservacion> ObtenerReservaciones()
+        public List<Reservacion> ObtenerReservaciones(string fecha, bool bandera)
         {
             List<Reservacion> reservaciones = new List<Reservacion>();
 
@@ -22,8 +22,24 @@ namespace CiscoLab.DataLayer
                 {
                     connection.Open();
 
-                    string query = "SELECT r.ID, CONVERT(varchar(5), r.Hora, 108) AS Hora, r.Fecha, CONCAT(u.Nombre, ' ', u.Apellidos) AS 'Nombre Completo', u.Username FROM Reservaciones r JOIN Usuarios u ON r.ID_Usuario = u.ID order by Fecha, Hora;";
+                    string query = "";
+                    if (bandera == true)
+                    {
+                        query = @"SELECT r.ID, CONVERT(varchar(5), r.Hora, 108) AS Hora, r.Fecha, 
+                                CONCAT(u.Nombre, ' ', u.Apellidos) AS 'Nombre Completo', 
+                                u.Username FROM Reservaciones r JOIN Usuarios u ON r.ID_Usuario = u.ID 
+                                where Fecha >= @Fecha order by Fecha asc, Hora asc;";
+                    }
+                    else
+                    {
+                        query = @"SELECT r.ID, CONVERT(varchar(5), r.Hora, 108) AS Hora, r.Fecha, 
+                                CONCAT(u.Nombre, ' ', u.Apellidos) AS 'Nombre Completo', 
+                                u.Username FROM Reservaciones r JOIN Usuarios u ON r.ID_Usuario = u.ID 
+                                where Fecha <= @Fecha order by Fecha desc, Hora asc;";
+                    }
+                    
                     SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@Fecha", fecha);
 
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
@@ -157,6 +173,48 @@ namespace CiscoLab.DataLayer
                 }
             }
         }
+
+
+
+        public List<Reservacion> ObtenerReservacionesUsuario(string fecha, string usuario)
+        {
+            List<Reservacion> reservaciones = new List<Reservacion>();
+
+            using (SqlConnection connection = new SqlConnection(strConexion))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = @"SELECT r.ID, CONVERT(varchar(5), r.Hora, 108) AS Hora, r.Fecha
+                                FROM Reservaciones r JOIN Usuarios u ON r.ID_Usuario = u.ID 
+                                where Username = @Usuario and Fecha >= @Fecha order by Fecha asc, Hora asc;";
+                    
+
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@Fecha", fecha);
+                    command.Parameters.AddWithValue("@Usuario", usuario);
+
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Reservacion reserv = new Reservacion();
+                        reserv.ID = Convert.ToInt32(reader["ID"]);
+                        reserv.Hora = reader["Hora"].ToString(); // Asegúrate de que esto sea un byte[]
+                        //reserv.Fecha = reader["Fecha"].ToString();
+                        reserv.Fecha = ((DateTime)reader["Fecha"]).ToString("dd-MM-yyyy");
+                        reservaciones.Add(reserv);
+                    }
+                    return reservaciones;
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
+            }
+        }
+
+
 
 
     }
