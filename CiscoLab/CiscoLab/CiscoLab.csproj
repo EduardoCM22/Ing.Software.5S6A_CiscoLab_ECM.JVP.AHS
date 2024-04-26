@@ -68,7 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="images\CiscoLabLogo.png" />
-    <Content Include="images\CiscoLabLogoRecortado.png" />
+    <Content Include="images\Icon.png" />
     <Content Include="pages\Login.aspx" />
     <Content Include="pages\PagAdmin.aspx" />
     <Content Include="pages\PagOpUs.aspx" />

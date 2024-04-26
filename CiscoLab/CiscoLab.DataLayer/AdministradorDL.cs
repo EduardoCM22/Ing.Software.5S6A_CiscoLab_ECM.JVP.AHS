@@ -15,6 +15,16 @@ namespace CiscoLab.DataLayer
 
         string strConexion = Conexion.strConexion;
 
+
+
+        private byte[] HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                return sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+            }
+        }
+
         public Administrador LoginAdministrador(string user, string passw)
         {
             Administrador administrador = null;
@@ -26,12 +36,12 @@ namespace CiscoLab.DataLayer
                     connection.Open();
 
                     // Hashear la contraseña proporcionada
-                    //byte[] hashedPasswBytes = HashPassword(passw);
+                    byte[] hashedPasswBytes = HashPassword(passw);
 
                     string query = "select * from Administradores where (Username=@user and Password=@passwHash);";
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@user", user);
-                    command.Parameters.AddWithValue("@passwHash", passw);
+                    command.Parameters.AddWithValue("@passwHash", hashedPasswBytes);
 
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.Read())
@@ -52,14 +62,6 @@ namespace CiscoLab.DataLayer
                 }
             }
         }
-
-        //private byte[] HashPassword(string password)
-        //{
-        //    using (SHA256 sha256 = SHA256.Create())
-        //    {
-        //        return sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-        //    }
-        //}
 
 
     }

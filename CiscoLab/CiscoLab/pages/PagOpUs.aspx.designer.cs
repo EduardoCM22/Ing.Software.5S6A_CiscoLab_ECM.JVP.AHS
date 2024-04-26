@@ -168,13 +168,13 @@ namespace CiscoLab.pages
         protected global::System.Web.UI.WebControls.RegularExpressionValidator revEmail;
 
         /// <summary>
-        /// revEmailLength control.
+        /// lblPassw control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator revEmailLength;
+        protected global::System.Web.UI.WebControls.Label lblPassw;
 
         /// <summary>
         /// txtPassword control.
@@ -202,6 +202,15 @@ namespace CiscoLab.pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator revPassword;
+
+        /// <summary>
+        /// lblConfmPassw control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblConfmPassw;
 
         /// <summary>
         /// txtConfirmPassword control.

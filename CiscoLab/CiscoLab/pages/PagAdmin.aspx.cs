@@ -20,23 +20,21 @@ namespace CiscoLab.pages
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Administrador administrador = new Administrador();
-            //administrador.Nombre = "Eduardo";
-            //administrador.Apellidos = "Campos Manriquez";
-            Administrador administrador = (Administrador)Session["Administrador"];
-            try 
+            if (!Page.IsPostBack)
             {
-                lblNombre.Text = "  " + administrador.Nombre + " " + administrador.Apellidos;
+                Administrador administrador = (Administrador)Session["Administrador"];
+                try
+                {
+                    lblNombre.Text = "  " + administrador.Nombre + " " + administrador.Apellidos;
+                }
+                catch (Exception ex)
+                {
+                    Response.Redirect("~/pages/Login.aspx");
+                }
+                CargarUsuarios();
+                CargarReservaciones();
+                CargarHistorialReservaciones();
             }
-            catch(Exception ex) 
-            {
-                Response.Redirect("~/pages/Login.aspx");
-            }
-            CargarUsuarios();
-            CargarReservaciones();
-            CargarHistorialReservaciones();
-            //cldrDiaInhabil.DayRender += new DayRenderEventHandler(cldrDiaInhabil_DayRender);
-            //cldrReservaciones.DayRender += new DayRenderEventHandler(cldrReservaciones_DayRender);
 
         }
 
@@ -242,7 +240,7 @@ namespace CiscoLab.pages
             }
             else if (rowsAffected == 2)
             {
-                lblValidacionTxtNoControl.Text = "El usuario ingresado es incorrecto";
+                lblValidacionTxtNoControl.Text = "Usuario ingresado no encontrado";
                 lblValidacionTxtNoControl.Visible = true;
                 return;
             }

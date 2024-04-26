@@ -49,6 +49,12 @@ label {
 
 /* Estilos para los mensajes de error */
 .text-danger {
+    color: #e3b80e;
+    margin-top: 2px;
+    font: bolder;
+}
+
+.text-warning {
     color: #e30e22;
     margin-top: 2px;
     font: bolder;

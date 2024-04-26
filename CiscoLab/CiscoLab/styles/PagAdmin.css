@@ -10,6 +10,7 @@ body {
     /*background: linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%);*/
     /*background: radial-gradient(circle at -4% -12.9%, rgb(74, 98, 110) 0.3%, rgb(30, 33, 48) 90.2%);*/
     background: radial-gradient(circle at 10% 20%, rgb(69, 86, 102) 0%, rgb(34, 34, 34) 90%);
+    margin-top: 80px;
 }
 
 
@@ -17,7 +18,7 @@ body {
     font-size:x-large;
     font-weight:lighter;
 }
-#lnkbtnUsuarios, #lnkbtnReservaciones, #lnkbtnHistReserv {
+#lnkbtnInicio, #lnkbtnUsuarios, #lnkbtnReservaciones, #lnkbtnHistReserv {
     font-size: large;
 }
 
