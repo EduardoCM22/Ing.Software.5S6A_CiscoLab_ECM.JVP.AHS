@@ -40,14 +40,61 @@ namespace CiscoLab.pages
 
         protected void cldrReservaciones_DayRender(object sender, DayRenderEventArgs e)
         {
-            DateTime a = e.Day.Date;
-            DateTime fecha = DateTime.Today;
+            DateTime fecha = e.Day.Date;
 
-            if (a < fecha)
+            // Lista de días feriados
+            List<DateTime> diasAsueto = new List<DateTime>
             {
+                new DateTime(2024, 1, 1),  // 1 de enero de 2024
+                new DateTime(2024, 2, 5),  // 5 de febrero de 2024
+                new DateTime(2024, 3, 5),  // 5 de marzo de 2024
+                new DateTime(2024, 3, 18), // 18 de marzo de 2024
+                new DateTime(2024, 3, 28), // 28 de marzo de 2024
+                new DateTime(2024, 3, 29), // 29 de marzo de 2024
+                new DateTime(2024, 5, 1),  // 1 de mayo de 2024
+                new DateTime(2024, 5, 10), // 10 de mayo de 2024
+                new DateTime(2024, 5, 15)  // 15 de mayo de 2024
+            };
+
+            List<DateTime> vacaciones = new List<DateTime>
+            {
+                new DateTime(2024, 1, 1),  // 1 de enero de 2024
+                new DateTime(2024, 1, 2),  // 2 de enero de 2024
+                new DateTime(2024, 1, 3),  // 3 de enero de 2024
+                new DateTime(2024, 1, 4),  // 4 de enero de 2024
+                new DateTime(2024, 1, 5),  // 5 de enero de 2024
+                new DateTime(2024, 3, 25), // 25 de marzo de 2024
+                new DateTime(2024, 3, 26), // 26 de marzo de 2024
+                new DateTime(2024, 3, 27), // 27 de marzo de 2024
+                new DateTime(2024, 3, 28), // 28 de marzo de 2024
+                new DateTime(2024, 3, 29), // 29 de marzo de 2024
+                new DateTime(2024, 4, 1),  // 1 de abril de 2024
+                new DateTime(2024, 4, 2),  // 2 de abril de 2024
+                new DateTime(2024, 4, 3),  // 3 de abril de 2024
+                new DateTime(2024, 4, 4),  // 4 de abril de 2024
+                new DateTime(2024, 4, 5)   // 5 de abril de 2024
+            };
+
+            // Comprobamos si la fecha actual es un día feriado y le asignamos la clase "diaAsueto"
+            if (diasAsueto.Contains(fecha))
+            {
+                e.Cell.ForeColor = System.Drawing.Color.DarkKhaki;
                 e.Day.IsSelectable = false;
             }
 
+            if (vacaciones.Contains(fecha))
+            {
+                e.Cell.BackColor = System.Drawing.Color.MediumSlateBlue;
+                e.Day.IsSelectable = false;
+            }
+           
+            DateTime fechaActual = DateTime.Today;
+
+            // Deshabilitamos días pasados y días de otros meses
+            if (fecha < fechaActual)
+            {
+                e.Day.IsSelectable = false;
+            }
             if (e.Day.IsOtherMonth)
             {
                 e.Day.IsSelectable = false;
@@ -55,6 +102,7 @@ namespace CiscoLab.pages
             }
             else
             {
+                // Resaltamos los fines de semana
                 if (e.Day.IsWeekend)
                 {
                     e.Cell.ForeColor = System.Drawing.Color.Red;
@@ -65,7 +113,9 @@ namespace CiscoLab.pages
                     e.Cell.CssClass = "esteMes";
                 }
             }
+            
         }
+
         protected void cldrReservaciones_SelectionChanged(object sender, EventArgs e)
         {
             cldrReservaciones.SelectedDayStyle.BackColor = System.Drawing.Color.SlateGray;

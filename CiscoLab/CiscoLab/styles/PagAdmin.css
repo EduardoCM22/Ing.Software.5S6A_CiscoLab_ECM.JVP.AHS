@@ -174,11 +174,13 @@ tbody > tr {
 
 
 
+
+
 .otroMes {
     color: darkgray !important; /* Color de texto gris para los días de otros meses */
 }
 .esteMes > a{
-    color: #fff !important;
+    color: lightskyblue !important;
 }
 table.calendar-dark td[colspan="7"] {
     background-color: #495057 !important;

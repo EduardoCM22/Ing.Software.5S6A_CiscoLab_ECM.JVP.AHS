@@ -42,7 +42,7 @@
                         <asp:RequiredFieldValidator ID="rfvNombre" runat="server" ControlToValidate="txtNombre"
                             ErrorMessage="El nombre es obligatorio" Display="Dynamic" CssClass="text-danger" />
                         <asp:RegularExpressionValidator ID="revNombre" runat="server" ControlToValidate="txtNombre"
-                            ErrorMessage="El nombre debe tener entre 2 y 50 caracteres" ValidationExpression="^.{2,50}$"
+                            ErrorMessage="El nombre debe tener entre 2 y 50 caracteres alfabéticos" ValidationExpression="^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s']{2,50}$"
                             Display="Dynamic" CssClass="text-danger" />
                     </div>
 
@@ -53,7 +53,7 @@
                         <asp:RequiredFieldValidator ID="rfvApellidos" runat="server" ControlToValidate="txtApellidos"
                             ErrorMessage="Los apellidos son obligatorios" Display="Dynamic" CssClass="text-danger" />
                         <asp:RegularExpressionValidator ID="revApellidos" runat="server" ControlToValidate="txtApellidos"
-                            ErrorMessage="Los apellidos deben tener entre 2 y 50 caracteres" ValidationExpression="^.{2,50}$"
+                            ErrorMessage="Los apellidos deben tener entre 2 y 50 caracteres alfabéticos" ValidationExpression="^[a-zA-ZÁÉÍÓÚÑáéíóúñ\s']{2,50}$"
                             Display="Dynamic" CssClass="text-danger" />
                     </div>
 
